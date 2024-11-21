@@ -3,10 +3,10 @@ import cv2
 import numpy as np
 from tkinter import *
 from PIL import Image, ImageGrab
-# from tensorflow.keras.models import load_model
+from tensorflow.keras.models import load_model
 
 # Load the CNN model
-# model = load_model('models/cnn_model.h5')
+model = load_model('models/cnn_model.h5')
 print('Model Loaded')
 
 
@@ -38,9 +38,8 @@ class DigitRecognitionApp:
 
         self.canvas = Canvas(
             self.frame_left,
-            bg="white",
-            highlightthickness=2,  # Border thickness
-            highlightbackground="gray"  # Black border around the canvas
+            bg="#FFFAF1",  # Light white background
+            highlightthickness=0  # No border around the canvas
         )
         self.canvas.grid(row=0, column=0, sticky="nsew")
 
@@ -136,7 +135,7 @@ class DigitRecognitionApp:
         y1 = y + self.canvas.winfo_height()
         ImageGrab.grab().crop((x, y, x1, y1)).save(filename)
 
-        # Process the image for prediction
+        # Process the image for digit recognition
         image = cv2.imread(filename, cv2.IMREAD_COLOR)
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         ret, th = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
@@ -144,41 +143,32 @@ class DigitRecognitionApp:
 
         predictions = []
 
-        # Clear existing borders on canvas
+        # Clear all existing borders on the canvas
         self.canvas.delete("border")
 
-        # Adjust for canvas highlight thickness
-        highlight_thickness = int(self.canvas.cget("highlightthickness"))
-
         for cnt in contours:
-            # Calculate bounding rectangle with padding
+            # Calculate bounding rectangle
             x, y, w, h = cv2.boundingRect(cnt)
-            padding = 50  # Add some space around the digit
+
+            # Add padding around the digit
+            padding = 50
             x_start = max(x - padding, 0)
             y_start = max(y - padding, 0)
             x_end = min(x + w + padding, th.shape[1])
             y_end = min(y + h + padding, th.shape[0])
 
-            # Adjust for highlight thickness
-            canvas_x_start = x_start + highlight_thickness
-            canvas_y_start = y_start + highlight_thickness
-            canvas_x_end = x_end + highlight_thickness
-            canvas_y_end = y_end + highlight_thickness
-
             # Draw the rectangle on the canvas
-            self.canvas.create_rectangle(canvas_x_start, canvas_y_start, canvas_x_end, canvas_y_end, outline="red",
-                                         width=2, tags="border")
+            self.canvas.create_rectangle(
+                x_start, y_start, x_end, y_end,
+                outline="gray", width=2, tags="border"
+            )
 
-            # Extract and preprocess the ROI
+            # Extract the region of interest (ROI) for prediction
             roi = th[y_start:y_end, x_start:x_end]
             roi = cv2.copyMakeBorder(
                 src=roi,
-                top=10,
-                bottom=10,
-                left=10,
-                right=10,
-                borderType=cv2.BORDER_CONSTANT,
-                value=0
+                top=10, bottom=10, left=10, right=10,
+                borderType=cv2.BORDER_CONSTANT, value=0
             )
             img = cv2.resize(roi, (28, 28), interpolation=cv2.INTER_AREA)
             img = img.reshape(1, 28, 28, 1)
@@ -188,10 +178,13 @@ class DigitRecognitionApp:
             pred = model.predict([img])[0]
             final_pred = np.argmax(pred)
             accuracy = int(max(pred) * 100)
-            predictions.append(f'Predict {final_pred} [{self.get_digit_label(final_pred)}] {accuracy}%')
+            predictions.append(f"Predict {final_pred} [{self.get_digit_label(final_pred)}] {accuracy}%")
 
-        # Update the output section with predictions
-        self.prediction_label.configure(text="\n".join(predictions))
+        # Display predictions in the output section
+        if predictions:
+            self.prediction_label.configure(text="\n".join(predictions))
+        else:
+            self.prediction_label.configure(text="No digits detected.")
 
     def get_digit_label(self, digit):
         labels = {
