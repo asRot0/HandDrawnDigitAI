@@ -148,7 +148,7 @@ If you'd like to retrain the model:
 3. Save the updated model as cnn_model.h5 in the models/ directory.
 
 ## 💡 Future Enhancements
-- ✍️ Add support for multiple languages (e.g., Hindi digits).
+- ✍️ Add support for multiple languages.
 - 📊 Integrate visualization of model predictions (e.g., activation maps).
 - 🔄 Real-time digit recognition with camera input.
 
