@@ -135,6 +135,17 @@ python run.py
 | ![Dark Mode](https://via.placeholder.com/200/333333/00FF00?text=Dark+Mode) | ![Oceanic](https://via.placeholder.com/200/E0FFFF/1E90FF?text=Oceanic) | ![Pink Black](https://via.placeholder.com/200/FFC0CB/FF007F?text=Pink+Black) |
 
 
+### 🌸 *`BlackPink`* Theme
+![themes](themes/pic1.png)
+>[*Themes*](themes/README.md)
+
+<span style="color:red">
+Text content
+</span>
+
+
+---
+
 ## 📖 Model Training (Optional)
 If you'd like to retrain the model:
 
