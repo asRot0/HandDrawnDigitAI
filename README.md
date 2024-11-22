@@ -137,12 +137,6 @@ python run.py
 
 ### 🌸 *`BlackPink`* Theme
 ![themes](themes/pic1.png)
->[*Themes*](themes/README.md)
-
-<span style="color:red">
-Text content
-</span>
-
 
 ---
 
