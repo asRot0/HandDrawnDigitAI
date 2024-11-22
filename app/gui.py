@@ -24,6 +24,9 @@ class DigitRecognitionApp:
         self.image_number = 0
         self.colorflag = True
 
+        # Selected theme
+        self.selected_theme = "corporate"  # Change this to apply a different theme
+
         # Create frames and widgets
         self.setup_frames()
 
@@ -78,9 +81,9 @@ class DigitRecognitionApp:
             width=5,
             height=40,
             corner_radius=20,
-            fg_color="#FFC0CB",
-            hover_color="#FFB6C1",
-            text_color="black",
+            fg_color=themes[self.selected_theme]["bg_colors"][0],
+            hover_color=themes[self.selected_theme]["hover_colors"][0],
+            text_color=themes[self.selected_theme]["text_colors"][0],
             font=("Arial", 14, "bold"),
         )
         self.btn_predict.grid(row=1, column=0, padx=10, pady=5, sticky="ew")
@@ -92,9 +95,9 @@ class DigitRecognitionApp:
             width=5,
             height=40,
             corner_radius=20,
-            fg_color="black",
-            hover_color="#333333",
-            text_color="white",
+            fg_color=themes[self.selected_theme]["bg_colors"][1],
+            hover_color=themes[self.selected_theme]["hover_colors"][1],
+            text_color=themes[self.selected_theme]["text_colors"][1],
             font=("Arial", 14, "bold"),
         )
         self.btn_clear.grid(row=2, column=0, padx=10, pady=5, sticky="ew")
@@ -155,17 +158,14 @@ class DigitRecognitionApp:
         if predictions:
             self.colorflag = True  # Toggle color flag
 
-            # Selected theme
-            selected_theme = "dark_mode"  # Change this to apply a different theme
-
             # Hide the default prediction label instead of destroying it
             if hasattr(self, 'prediction_label') and self.prediction_label.winfo_ismapped():
                 self.prediction_label.grid_forget()
 
             for i in predictions:
                 # Alternate text and background colors
-                current_text_color = themes[selected_theme]["text_colors"][0 if self.colorflag else 1]
-                current_bg_color = themes[selected_theme]["bg_colors"][0 if self.colorflag else 1]
+                current_text_color = themes[self.selected_theme]["text_colors"][0 if self.colorflag else 1]
+                current_bg_color = themes[self.selected_theme]["bg_colors"][0 if self.colorflag else 1]
 
                 # Create and add a new CTkLabel for each prediction
                 ctk.CTkLabel(
