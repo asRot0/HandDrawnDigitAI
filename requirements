@@ -1,5 +1,5 @@
-tensorflow
-customtkinter
-numpy
-opencv-python
-pillow
+tensorflow==2.10.0
+customtkinter==5.1.2
+pillow==9.2.0
+numpy==1.23.0
+opencv-python==4.6.0
