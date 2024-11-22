@@ -9,13 +9,16 @@ class DigitRecognitionApp:
     def __init__(self, root):
         ctk.set_appearance_mode('light')
         ctk.set_default_color_theme("green")
+        ctk.CTkFont(family="Arial", size=14, weight="bold")
 
         self.root = root
         self.root.title("Digit Recognition App")
+
+        # Set initial window size and make it resizable
         self.root.geometry("800x600")
         self.root.rowconfigure(0, weight=1, uniform="a")
-        self.root.columnconfigure(0, weight=7, uniform="a")  # Left column
-        self.root.columnconfigure(1, weight=3, uniform="a")  # Right column
+        self.root.columnconfigure(0, weight=7, uniform="a")  # Left column (70%)
+        self.root.columnconfigure(1, weight=3, uniform="a")  # Right column (30%)
 
         self.lastx, self.lasty = None, None
         self.image_number = 0
@@ -38,6 +41,7 @@ class DigitRecognitionApp:
         # Canvas for drawing
         self.frame_left.rowconfigure(0, weight=1)
         self.frame_left.columnconfigure(0, weight=1)
+
         self.canvas = Canvas(self.frame_left, bg="#FFFAF1", highlightthickness=0)
         self.canvas.grid(row=0, column=0, sticky="nsew")
         self.canvas.bind("<Button-1>", self.activate_event)
@@ -47,6 +51,13 @@ class DigitRecognitionApp:
 
     def setup_right_column(self):
         """Setup the right column (output and buttons)."""
+        # Right Column: Output and Buttons
+        self.frame_right.rowconfigure(0, weight=1)
+        self.frame_right.rowconfigure(1, weight=0)
+        self.frame_right.rowconfigure(2, weight=0)
+        self.frame_right.columnconfigure(0, weight=1)
+
+        # Output Section (Top of the Right Column)
         self.output_frame = ctk.CTkFrame(self.frame_right, fg_color="#D3D3D3")
         self.output_frame.grid(row=0, column=0, pady=(0, 2), sticky="nsew")
 
@@ -88,48 +99,12 @@ class DigitRecognitionApp:
         )
         self.btn_clear.grid(row=2, column=0, padx=10, pady=5, sticky="ew")
 
-    def clear_canvas(self):
-        self.canvas.delete("all")
-        for widget in self.output_frame.winfo_children():
-            widget.destroy()
+        # Bind resize event to dynamically adjust the canvas
+        self.root.bind("<Configure>", self.resize_canvas)
 
-        self.prediction_label.grid(row=0, column=0, padx=2, pady=10, sticky="nsew")
-
-    def recognize_digit(self):
-        filename = f'logs/image_{self.image_number}.png'
-        x = self.root.winfo_rootx() + self.canvas.winfo_x()
-        y = self.root.winfo_rooty() + self.canvas.winfo_y()
-        x1 = x + self.canvas.winfo_width()
-        y1 = y + self.canvas.winfo_height()
-        ImageGrab.grab().crop((x, y, x1, y1)).save(filename)
-
-        predictions = self.digit_recognizer.recognize(filename)
-        self.display_predictions(predictions)
-
-    def display_predictions(self, predictions):
-        if predictions:
-            self.colorflag = True
-            selected_theme = "pink_black"
-
-            self.prediction_label.grid_forget()
-
-            for i in predictions:
-                current_text_color = themes[selected_theme]["text_colors"][0 if self.colorflag else 1]
-                current_bg_color = themes[selected_theme]["bg_colors"][0 if self.colorflag else 1]
-
-                ctk.CTkLabel(
-                    self.output_frame,
-                    text=i,
-                    text_color=current_text_color,
-                    fg_color=current_bg_color,
-                    anchor="w",
-                    padx=5,
-                    font=("Arial", 14, "bold")
-                ).grid(pady=(0, 3), padx=10, sticky='nsew')
-
-                self.colorflag = not self.colorflag
-        else:
-            self.prediction_label.configure(text="No digits detected")
+    def resize_canvas(self, event):
+        # Dynamically resize the canvas to fit the left frame
+        self.canvas.config(width=self.frame_left.winfo_width(), height=self.frame_left.winfo_height())
 
     def activate_event(self, event):
         self.canvas.bind("<B1-Motion>", self.draw_lines)
@@ -142,3 +117,69 @@ class DigitRecognitionApp:
             width=30, fill="black", capstyle=ROUND, smooth=TRUE, splinesteps=12
         )
         self.lastx, self.lasty = x, y
+
+    def clear_canvas(self):
+        self.canvas.delete("all")
+
+        # Destroy all widgets inside the output frame (reset predictions)
+        for widget in self.output_frame.winfo_children():
+            widget.destroy()
+
+        # Restore the default prediction label
+        # Check if prediction_label exists; if not, recreate it
+        if not hasattr(self, 'prediction_label') or not self.prediction_label.winfo_exists():
+            self.prediction_label = ctk.CTkLabel(
+                self.output_frame,
+                text="Predictions will be shown here",
+                font=("Arial", 16, "italic"),
+                anchor="center",
+                wraplength=240,
+                text_color="black"
+            )
+            self.prediction_label.grid(row=0, column=0, padx=2, pady=10, sticky="nsew")
+
+    def recognize_digit(self):
+        # Take a screenshot of the canvas area
+        filename = f'logs/image_{self.image_number}.png'
+        x = self.root.winfo_rootx() + self.canvas.winfo_x()
+        y = self.root.winfo_rooty() + self.canvas.winfo_y()
+        x1 = x + self.canvas.winfo_width()
+        y1 = y + self.canvas.winfo_height()
+        ImageGrab.grab().crop((x, y, x1, y1)).save(filename)
+
+        predictions = self.digit_recognizer.recognize(filename, self.canvas)
+        self.display_predictions(predictions)
+
+    def display_predictions(self, predictions):
+        # Display predictions in the output section
+        if predictions:
+            self.colorflag = True  # Toggle color flag
+
+            # Selected theme
+            selected_theme = "dark_mode"  # Change this to apply a different theme
+
+            # Hide the default prediction label instead of destroying it
+            if hasattr(self, 'prediction_label') and self.prediction_label.winfo_ismapped():
+                self.prediction_label.grid_forget()
+
+            for i in predictions:
+                # Alternate text and background colors
+                current_text_color = themes[selected_theme]["text_colors"][0 if self.colorflag else 1]
+                current_bg_color = themes[selected_theme]["bg_colors"][0 if self.colorflag else 1]
+
+                # Create and add a new CTkLabel for each prediction
+                ctk.CTkLabel(
+                    self.output_frame,
+                    text=i,
+                    text_color=current_text_color,
+                    fg_color=current_bg_color,
+                    anchor="w",
+                    padx=5,
+                    font=("Arial", 14, "bold")
+                ).grid(pady=(0, 3), padx=10, sticky='nsew')
+
+                # Toggle the color for the next prediction
+                self.colorflag = not self.colorflag
+
+        else:
+            self.prediction_label.configure(text="No digits detected")
