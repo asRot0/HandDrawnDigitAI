@@ -9,6 +9,30 @@ from tensorflow.keras.models import load_model
 model = load_model('models/cnn_model.h5')
 print('Model Loaded')
 
+# Define themes as a dictionary
+themes = {
+    "pink_black": {
+        "text_colors": ['#FF007F', '#000000'],
+        "bg_colors": ['#FFC0CB', '#F5F5F5']
+    },
+    "dark_mode": {
+        "text_colors": ['#00FF00', '#FFD700'],
+        "bg_colors": ['#333333', '#444444']
+    },
+    "oceanic": {
+        "text_colors": ['#1E90FF', '#00CED1'],
+        "bg_colors": ['#E0FFFF', '#B0E0E6']
+    },
+    "corporate": {
+        "text_colors": ['#2C3E50', '#E74C3C'],
+        "bg_colors": ['#ECF0F1', '#BDC3C7']
+    },
+    "vibrant": {
+        "text_colors": ['#FF4500', '#32CD32'],
+        "bg_colors": ['#FFFFE0', '#FFDAB9']
+    }
+}
+
 
 class DigitRecognitionApp:
     def __init__(self, root):
@@ -124,7 +148,23 @@ class DigitRecognitionApp:
 
     def clear_canvas(self):
         self.canvas.delete("all")
-        self.prediction_label.configure(text="Predictions will be shown here.")
+
+        # Destroy all widgets inside the output frame (reset predictions)
+        for widget in self.output_frame.winfo_children():
+            widget.destroy()
+
+        # Restore the default prediction label
+        # Check if prediction_label exists; if not, recreate it
+        if not hasattr(self, 'prediction_label') or not self.prediction_label.winfo_exists():
+            self.prediction_label = ctk.CTkLabel(
+                self.output_frame,
+                text="Predictions will be shown here",
+                font=("Arial", 16, "italic"),
+                anchor="center",
+                wraplength=240,
+                text_color="black"
+            )
+            self.prediction_label.grid(row=0, column=0, padx=2, pady=10, sticky="nsew")
 
     def recognize_digit(self):
         # Take a screenshot of the canvas area
@@ -151,7 +191,7 @@ class DigitRecognitionApp:
             x, y, w, h = cv2.boundingRect(cnt)
 
             # Add padding around the digit
-            padding = 50
+            padding = 60
             x_start = max(x - padding, 0)
             y_start = max(y - padding, 0)
             x_end = min(x + w + padding, th.shape[1])
@@ -180,11 +220,40 @@ class DigitRecognitionApp:
             accuracy = int(max(pred) * 100)
             predictions.append(f"Predict {final_pred} [{self.get_digit_label(final_pred)}] {accuracy}%")
 
+            # self.prediction_label.configure(text=predictions[-1], fg_color='orange')
+
         # Display predictions in the output section
         if predictions:
-            self.prediction_label.configure(text="\n".join(predictions))
+            self.colorflag = True  # Toggle color flag
+
+            # Selected theme
+            selected_theme = "dark_mode"  # Change this to apply a different theme
+
+            # Hide the default prediction label instead of destroying it
+            if hasattr(self, 'prediction_label') and self.prediction_label.winfo_ismapped():
+                self.prediction_label.grid_forget()
+
+            for i in predictions:
+                # Alternate text and background colors
+                current_text_color = themes[selected_theme]["text_colors"][0 if self.colorflag else 1]
+                current_bg_color = themes[selected_theme]["bg_colors"][0 if self.colorflag else 1]
+
+                # Create and add a new CTkLabel for each prediction
+                ctk.CTkLabel(
+                    self.output_frame,
+                    text=i,
+                    text_color=current_text_color,
+                    fg_color=current_bg_color,
+                    anchor="w",
+                    padx=5,
+                    font=("Arial", 14, "bold")
+                ).grid(pady=(0, 3), padx=10, sticky='nsew')
+
+                # Toggle the color for the next prediction
+                self.colorflag = not self.colorflag
+
         else:
-            self.prediction_label.configure(text="No digits detected.")
+            self.prediction_label.configure(text="No digits detected")
 
     def get_digit_label(self, digit):
         labels = {
