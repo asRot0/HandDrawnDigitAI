@@ -111,7 +111,7 @@ Follow these steps to get started:
 1. Clone the repository:
 
 ```
-git clone https://github.com/username/HandDrawnDigitAI.git
+git clone https://github.com/asRot0/HandDrawnDigitAI.git
 cd HandDrawnDigitAI
 ```
 
