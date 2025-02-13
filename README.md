@@ -270,5 +270,3 @@ Want to contribute? Feel free to fork the repository and open a pull request!
 
 ## 🤝 Support
 If you find this project helpful, consider giving it a ⭐ on [GitHub](https://github.com/asRot0/HandDrawnDigitAI) and sharing it with others!
-
----
