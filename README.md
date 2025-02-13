@@ -140,6 +140,114 @@ python run.py
 
 ---
 
+## 🔢 Key Math Concepts for CNN & MNIST
+
+Here are some important mathematical formulas used in this project
+
+### **1️⃣ Convolution Operation (Feature Extraction in CNN)**
+Convolutional layers apply filters to extract features from input images.
+
+$$
+\LARGE O(i, j) = \sum_m \sum_n I(i+m, j+n) \cdot K(m, n)
+$$
+
+- **\( O(i, j) \)** → Output feature map at position \( (i, j) \).  
+- **\( I(i+m, j+n) \)** → Input image pixels affected by the filter.  
+- **\( K(m, n) \)** → Kernel (filter) values applied to the input.  
+
+📌 **Why Add?**
+- Represents how a **filter (kernel) slides over an image** to extract meaningful features.
+- Core operation in **Convolutional Neural Networks (CNNs)**.
+
+---
+
+### **2️⃣ ReLU Activation Function (Hidden Layers)**
+ReLU introduces non-linearity to the model by keeping only positive values.
+
+$$
+\LARGE \text{ReLU}(x) = \max(0, x)
+$$
+
+- **\( x \)** → Input value to the activation function.  
+
+📌 **Why Add?**
+- Helps **prevent vanishing gradients**.
+- Improves CNN’s ability to learn complex patterns.
+
+---
+
+### **3️⃣ Max Pooling (Dimensionality Reduction)**
+Max pooling reduces the spatial size of feature maps while preserving key information.
+
+$$
+\LARGE P(i, j) = \max_{(m,n) \in R} F(i+m, j+n)
+$$
+
+- **\( P(i, j) \)** → Pooled output value at position \( (i, j) \).  
+- **\( F(i+m, j+n) \)** → Input feature map values in the pooling region.  
+- **\( R \)** → Pooling region (e.g., 2×2 or 3×3 window).  
+
+📌 **Why Add?**
+- Reduces computation and prevents **overfitting**.
+- Keeps **dominant features** while discarding unnecessary details.
+
+---
+
+### **4️⃣ Softmax Function (Final Layer for Classification)**
+The softmax function converts model outputs into probability distributions.
+
+$$
+\LARGE \text{Softmax}(z_i) = \frac{e^{z_i}}{\sum_{j=1}^{n} e^{z_j}}
+$$
+
+- **\( z_i \)** → Raw score (logit) for class \( i \).  
+- **\( e^{z_i} \)** → Exponential of the logit, ensuring positive values.  
+- **\( \sum_{j=1}^{n} e^{z_j} \)** → Sum of exponentials across all \( n \) classes (normalization factor).  
+
+📌 **Why Add?**
+- Softmax assigns **probabilities to digit classes (0-9)**.
+- Ensures outputs sum up to **1**, making it interpretable.
+
+---
+
+### **5️⃣ Cross-Entropy Loss (Training the CNN)**
+Cross-entropy measures the difference between predicted and actual labels.
+
+$$
+\LARGE \mathcal{L} = -\sum_{i=1}^{n} y_i \log(\hat{y_i})
+$$
+
+- **\( \mathcal{L} \)** → Cross-entropy loss value.  
+- **\( y_i \)** → Actual label (ground truth) for class \( i \) (1 for correct class, 0 otherwise).  
+- **\( \hat{y_i} \)** → Predicted probability from the softmax function.  
+
+📌 **Why Add?**
+- Penalizes incorrect predictions by increasing the loss.
+- Common **loss function** for **multi-class classification**.
+
+---
+
+### **6️⃣ Adam Optimizer (Gradient Descent for CNN Training)**
+Adam adjusts learning rates based on gradients to optimize CNN performance.
+
+$$
+\LARGE \theta_{t+1} = \theta_t - \frac{\eta}{\sqrt{v_t} + \epsilon} m_t
+$$
+
+- **\( \theta_t \)** → Model parameters at step \( t \).  
+- **\( m_t \)** → First moment estimate (mean of gradients).  
+- **\( v_t \)** → Second moment estimate (variance of gradients).  
+- **\( \eta \)** → Learning rate (step size).  
+- **\( \epsilon \)** → Small constant to avoid division by zero.  
+
+📌 **Why Add?**
+- Used as the **optimizer** in this project (`optimizer='adam'`).
+- Combines **momentum & adaptive learning rates** for faster convergence.
+
+These mathematical concepts power the **CNN architecture** used in this project. They help in **feature extraction, classification, optimization, and learning** to recognize hand-drawn digits **efficiently and accurately**.  
+
+---
+
 ## 📖 Model Training (Optional)
 If you'd like to retrain the model:
 
