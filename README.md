@@ -168,7 +168,7 @@ $$
 \LARGE \text{ReLU}(x) = \max(0, x)
 $$
 
-- **\( x \)** → Input value to the activation function.  
+- $`x`$ → Input value to the activation function.  
 
 📌 **Why Add?**
 - Helps **prevent vanishing gradients**.
@@ -183,9 +183,9 @@ $$
 \LARGE P(i, j) = \max_{(m,n) \in R} F(i+m, j+n)
 $$
 
-- **\( P(i, j) \)** → Pooled output value at position \( (i, j) \).  
-- **\( F(i+m, j+n) \)** → Input feature map values in the pooling region.  
-- **\( R \)** → Pooling region (e.g., 2×2 or 3×3 window).  
+- $`P(i, j)`$ → Pooled output value at position $(i, j)$.  
+- $`F(i+m, j+n)`$ → Input feature map values in the pooling region.  
+- $`R`$ → Pooling region (e.g., 2×2 or 3×3 window).  
 
 📌 **Why Add?**
 - Reduces computation and prevents **overfitting**.
@@ -200,9 +200,9 @@ $$
 \LARGE \text{Softmax}(z_i) = \frac{e^{z_i}}{\sum_{j=1}^{n} e^{z_j}}
 $$
 
-- **\( z_i \)** → Raw score (logit) for class \( i \).  
-- **\( e^{z_i} \)** → Exponential of the logit, ensuring positive values.  
-- **\( \sum_{j=1}^{n} e^{z_j} \)** → Sum of exponentials across all \( n \) classes (normalization factor).  
+- $`z_i`$ → Raw score (logit) for class $i$.  
+- $`e^{z_i}`$ → Exponential of the logit, ensuring positive values.  
+- $`\sum_{j=1}^{n} e^{z_j}`$ → Sum of exponentials across all \( n \) classes (normalization factor).  
 
 📌 **Why Add?**
 - Softmax assigns **probabilities to digit classes (0-9)**.
