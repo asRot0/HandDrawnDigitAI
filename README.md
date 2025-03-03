@@ -151,9 +151,9 @@ $$
 \LARGE O(i, j) = \sum_m \sum_n I(i+m, j+n) \cdot K(m, n)
 $$
 
-- $`\O(i, j)`$ → Output feature map at position \( (i, j) \).  
-- **\( I(i+m, j+n) \)** → Input image pixels affected by the filter.  
-- **\( K(m, n) \)** → Kernel (filter) values applied to the input.  
+- $`O(i, j)`$ → Output feature map at position $(i, j)$.  
+- $`I(i+m, j+n)`$ → Input image pixels affected by the filter.  
+- $`K(m, n)`$ → Kernel (filter) values applied to the input.  
 
 📌 **Why Add?**
 - Represents how a **filter (kernel) slides over an image** to extract meaningful features.
