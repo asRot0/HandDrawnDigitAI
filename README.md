@@ -200,9 +200,9 @@ $$
 \LARGE \text{Softmax}(z_i) = \frac{e^{z_i}}{\sum_{j=1}^{n} e^{z_j}}
 $$
 
-- $`z_i`$ → Raw score (logit) for class $i$.  
+- $`z_i`$ → Raw score (logit) for class $( i )$.  
 - $`e^{z_i}`$ → Exponential of the logit, ensuring positive values.  
-- $`\sum_{j=1}^{n} e^{z_j}`$ → Sum of exponentials across all \( n \) classes (normalization factor).  
+- $`\sum_{j=1}^{n} e^{z_j}`$ → Sum of exponentials across all $( n )$ classes (normalization factor).  
 
 📌 **Why Add?**
 - Softmax assigns **probabilities to digit classes (0-9)**.
