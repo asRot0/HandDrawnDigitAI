@@ -153,7 +153,7 @@ $$
 
 - $`O(i, j)`$ → Output feature map at position $(i, j)$.  
 - $`I(i+m, j+n)`$ → Input image pixels affected by the filter.  
-- $`K(m, n)`$ → Kernel (filter) values applied to the input.  
+- $`K(m, n)`$ → Kernel (`filter`) values applied to the input.  
 
 📌 **Why Add?**
 - Represents how a **filter (kernel) slides over an image** to extract meaningful features.
@@ -217,9 +217,9 @@ $$
 \LARGE \mathcal{L} = -\sum_{i=1}^{n} y_i \log(\hat{y_i})
 $$
 
-- **\( \mathcal{L} \)** → Cross-entropy loss value.  
-- **\( y_i \)** → Actual label (ground truth) for class \( i \) (1 for correct class, 0 otherwise).  
-- **\( \hat{y_i} \)** → Predicted probability from the softmax function.  
+- $`\mathcal{L}`$ → Cross-entropy loss value.  
+- $`y_i`$ → Actual label (ground truth) for class $( i )$ (1 for correct class, 0 otherwise).  
+- $`\hat{y_i}`$ → Predicted probability from the `softmax` function.  
 
 📌 **Why Add?**
 - Penalizes incorrect predictions by increasing the loss.
@@ -234,11 +234,11 @@ $$
 \LARGE \theta_{t+1} = \theta_t - \frac{\eta}{\sqrt{v_t} + \epsilon} m_t
 $$
 
-- **\( \theta_t \)** → Model parameters at step \( t \).  
-- **\( m_t \)** → First moment estimate (mean of gradients).  
-- **\( v_t \)** → Second moment estimate (variance of gradients).  
-- **\( \eta \)** → Learning rate (step size).  
-- **\( \epsilon \)** → Small constant to avoid division by zero.  
+- $`\theta_t`$ → Model parameters at step $( t )$.  
+- $`m_t`$ → First moment estimate (mean of gradients).  
+- $`v_t`$ → Second moment estimate (variance of gradients).  
+- $`\eta`$ → Learning rate (step size).  
+- $`\epsilon`$ → Small constant to avoid division by zero.  
 
 📌 **Why Add?**
 - Used as the **optimizer** in this project (`optimizer='adam'`).
