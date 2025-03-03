@@ -1,6 +1,6 @@
-# ✋🖌️ HandDrawnDigitAI
+# 🎨 HandDrawnDigitAI
 
-Welcome to **HandDrawnDigitAI** – an intuitive app for recognizing hand-drawn digits! Powered by **CustomTkinter**, a pre-trained **Convolutional Neural Network (CNN)**, and a user-friendly **GUI**, this project brings machine learning right to your fingertips. Draw digits, recognize them instantly, and enjoy the seamless experience!
+Welcome to **HandDrawnDigitAI** 🤖 – an intuitive app for recognizing hand-drawn digits! Powered by **CustomTkinter**, a pre-trained **Convolutional Neural Network (CNN)**, and a user-friendly **GUI**, this project brings machine learning right to your fingertips. Draw digits, recognize them instantly, and enjoy the seamless experience!
 
 ---
 
